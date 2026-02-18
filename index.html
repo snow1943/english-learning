@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova's English Learning</title>
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --secondary: #10B981;
+            --bg: #F9FAFB;
+            --card: #FFFFFF;
+            --text: #1F2937;
+            --text-light: #6B7280;
+            --highlight: #FEF3C7;
+            -- mastered: #D1FAE5;
+            --learning: #DBEAFE;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .subtitle {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+        
+        .article-card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .article-meta {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        
+        .tag {
+            background: var(--learning);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .tag.interest {
+            background: #FCE7F3;
+            color: #DB2777;
+        }
+        
+        .article-content {
+            font-size: 16px;
+            line-height: 1.8;
+        }
+        
+        .vocab-item {
+            cursor: pointer;
+            border-bottom: 2px solid var(--highlight);
+            padding: 2px 0;
+            transition: all 0.2s;
+            position: relative;
+        }
+        
+        .vocab-item:hover {
+            background: var(--highlight);
+        }
+        
+        .vocab-item.mastered {
+            border-bottom-color: var(--mastered);
+            background: var(--mastered);
+        }
+        
+        .vocab-item .tooltip {
+            display: none;
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            white-space: nowrap;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .vocab-item:hover .tooltip {
+            display: block;
+        }
+        
+        .vocab-item .tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: var(--text);
+        }
+        
+        .vocab-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #D1D5DB;
+            color: var(--text);
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        
+        .quiz-section {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .quiz-section.active {
+            display: block;
+        }
+        
+        .quiz-question {
+            margin-bottom: 16px;
+        }
+        
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .quiz-option {
+            padding: 12px;
+            border: 2px solid #E5E7EB;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .quiz-option:hover {
+            border-color: var(--primary);
+            background: var(--learning);
+        }
+        
+        .quiz-option.correct {
+            border-color: var(--secondary);
+            background: var(--mastered);
+        }
+        
+        .quiz-option.wrong {
+            border-color: #EF4444;
+            background: #FEE2E2;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #E5E7EB;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 16px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: var(--text-light);
+            font-size: 13px;
+        }
+        
+        .streak {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #FEF3C7;
+            padding: 6px 12px;
+            border-radius: 20px;
+            color: #D97706;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Nova's English Learning</h1>
+            <p class="subtitle">Level: B1 | Daily Reading</p>
+            <div class="streak">🔥 Day 1 Streak</div>
+        </header>
+        
+        <div class="article-card">
+            <div class="article-meta">
+                <span class="tag">B1</span>
+                <span class="tag interest">Tech</span>
+                <span class="tag">234 words</span>
+            </div>
+            
+            <div class="article-content" id="articleContent">
+                <p>Artificial Intelligence is changing how we live and work. <span class="vocab-item" data-word="Artificial Intelligence" data-def="人工智能 (n.)">Artificial Intelligence</span> refers to computer systems that can perform tasks that typically require human intelligence.</p>
+                
+                <p>One exciting area is <span class="vocab-item" data-word="generative" data-def="生成的; 生成的 (adj.)">generative</span> AI, which can create new content like text, images, and even music. Tools like ChatGPT have made this technology accessible to everyone.</p>
+                
+                <p>However, experts warn about the challenges. <span class="vocab-item" data-word="ethical" data-def="道德的; 伦理的 (adj.)">ethical</span> questions arise when AI makes important decisions. We need to ensure these systems are <span class="vocab-item" data-word="fair" data-def="公平的 (adj.)">fair</span> and <span class="vocab-item" data-word="transparent" data-def="透明的; 直率的 (adj.)">transparent</span>.</p>
+                
+                <p>The future of AI looks promising. With <span class="vocab-item" data-word="responsible" data-def="负责任的 (adj.)">responsible</span> development, it can help solve problems in healthcare, climate change, and education.</p>
+            </div>
+            
+            <div class="vocab-actions">
+                <button class="btn btn-outline" onclick="toggleQuiz()">📝 Take Quiz</button>
+                <button class="btn btn-outline" onclick="markAllKnown()">✓ I Know These</button>
+            </div>
+        </div>
+        
+        <div class="quiz-section" id="quizSection">
+            <h3>🧠 Quick Quiz</h3>
+            <div class="progress-bar">
+                <div class="progress-fill" id="quizProgress" style="width: 0%"></div>
+            </div>
+            
+            <div id="quizQuestions"></div>
+            
+            <button class="btn btn-primary" onclick="showResults()" id="showResultsBtn" style="display:none; margin-top: 16px;">See Results</button>
+            
+            <div id="quizResults" style="display:none; text-align: center;">
+                <h4>🎉 Great job!</h4>
+                <p>You got <span id="scoreDisplay">0</span> out of <span id="totalDisplay">0</span> correct!</p>
+                <button class="btn btn-primary" onclick="resetQuiz()">Try Again</button>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Built with ❤️ for Nova's English Learning</p>
+            <p>Powered by AI + Spaced Repetition</p>
+        </footer>
+    </div>
+    
+    <script>
+        const quizData = [
+            {
+                question: "What does 'Artificial Intelligence' refer to?",
+                options: [
+                    "Computer systems that can perform tasks requiring human intelligence",
+                    "A type of robot",
+                    "A programming language",
+                    "A social media platform"
+                ],
+                correct: 0
+            },
+            {
+                question: "What is 'generative' AI able to do?",
+                options: [
+                    "Only analyze data",
+                    "Create new content like text, images, and music",
+                    "Only write code",
+                    "Delete files"
+                ],
+                correct: 1
+            },
+            {
+                question: "Why are 'ethical' questions important in AI?",
+                options: [
+                    "Because AI is expensive",
+                    "Because AI makes important decisions that affect people",
+                    "Because AI needs electricity",
+                    "Because AI speaks languages"
+                ],
+                correct: 1
+            }
+        ];
+        
+        let currentQuestion = 0;
+        let score = 0;
+        
+        function toggleQuiz() {
+            const section = document.getElementById('quizSection');
+            section.classList.toggle('active');
+            if (section.classList.contains('active') && currentQuestion === 0) {
+                showQuestion();
+            }
+        }
+        
+        function showQuestion() {
+            const q = quizData[currentQuestion];
+            const container = document.getElementById('quizQuestions');
+            container.innerHTML = `
+                <div class="quiz-question">
+                    <p><strong>Question ${currentQuestion + 1}:</strong> ${q.question}</p>
+                    <div class="quiz-options">
+                        ${q.options.map((opt, i) => `
+                            <div class="quiz-option" onclick="selectAnswer(${i})">${opt}</div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('quizProgress').style.width = 
+                ((currentQuestion) / quizData.length * 100) + '%';
+        }
+        
+        function selectAnswer(selectedIndex) {
+            const q = quizData[currentQuestion];
+            const options = document.querySelectorAll('.quiz-option');
+            
+            options.forEach((opt, i) => {
+                opt.style.pointerEvents = 'none';
+                if (i === q.correct) {
+                    opt.classList.add('correct');
+                } else if (i === selectedIndex && i !== q.correct) {
+                    opt.classList.add('wrong');
+                }
+            });
+            
+            if (selectedIndex === q.correct) {
+                score++;
+            }
+            
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion < quizData.length) {
+                    showQuestion();
+                } else {
+                    document.getElementById('showResultsBtn').style.display = 'inline-block';
+                }
+            }, 1000);
+        }
+        
+        function showResults() {
+            document.getElementById('quizQuestions').style.display = 'none';
+            document.getElementById('showResultsBtn').style.display = 'none';
+            document.getElementById('quizResults').style.display = 'block';
+            document.getElementById('scoreDisplay').textContent = score;
+            document.getElementById('totalDisplay').textContent = quizData.length;
+            document.getElementById('quizProgress').style.width = '100%';
+        }
+        
+        function resetQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            document.getElementById('quizQuestions').style.display = 'block';
+            document.getElementById('quizResults').style.display = 'none';
+            document.getElementById('showResultsBtn').style.display = 'none';
+            showQuestion();
+        }
+        
+        function markAllKnown() {
+            const items = document.querySelectorAll('.vocab-item');
+            items.forEach(item => {
+                item.classList.add('mastered');
+            });
+            alert('Great! You marked all words as known. Keep up the good work! 💪');
+        }
+        
+        // Click on vocab words
+        document.querySelectorAll('.vocab-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const word = this.dataset.word;
+                const def = this.dataset.def;
+                
+                // In a real app, this would use TTS API
+                console.log('Clicked:', word, '- Definition:', def);
+                
+                // Toggle mastered state
+                this.classList.toggle('mastered');
+            });
+        });
+    </script>
+</body>
+</html>

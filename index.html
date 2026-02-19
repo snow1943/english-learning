@@ -529,9 +529,10 @@
                 </div>
                 
                 <div class="actions">
-                    <button class="btn btn-outline" onclick="playArticleAudio()">🔊 朗读文章</button>
-                    <button class="btn btn-primary" onclick="goToQuiz()">📝 开始测试</button>
-                </div>
+                <button class="btn btn-outline" onclick="playArticleAudio()">🔊 朗读文章</button>
+                <button class="btn btn-primary" onclick="goToQuiz()">📝 开始测试</button>
+                <button class="btn btn-outline" onclick="saveProgress()">💾 保存进度</button>
+            </div>
             </div>
         </div>
         
@@ -944,6 +945,45 @@
         
         // 初始化
         init();
+        
+        // 加载本地进度
+        loadProgress();
+        
+        // 保存进度 - 生成数据供同步
+        
+        // 保存进度 - 生成数据供同步
+        function saveProgress() {
+            const data = {
+                vocabStatus: vocabStatus,
+                lastUpdated: new Date().toISOString()
+            };
+            
+            const jsonStr = JSON.stringify(data, null, 2);
+            
+            // 保存到 localStorage
+            localStorage.setItem('englishVocabStatus', jsonStr);
+            
+            // 复制到剪贴板
+            navigator.clipboard.writeText(jsonStr).then(() => {
+                alert('✅ 进度已保存到本地！\n\n词汇数据已复制到剪贴板，请发给 Nova，我会帮你同步到云端~');
+            }).catch(() => {
+                alert('✅ 进度已保存到本地！\n\n数据：\n' + jsonStr);
+            });
+        }
+        
+        // 从本地加载进度
+        function loadProgress() {
+            const saved = localStorage.getItem('englishVocabStatus');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    vocabStatus = data.vocabStatus || {};
+                    console.log('已加载词汇进度:', Object.keys(vocabStatus).length, '个词汇');
+                } catch (e) {
+                    console.error('加载进度失败:', e);
+                }
+            }
+        }
         
         // 文章文字点击功能 - 任意单词可点击
         document.getElementById('articleContent').addEventListener('click', function(e) {

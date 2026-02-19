@@ -943,43 +943,65 @@
             }
         });
         
+        // Worker API 地址
+        const WORKER_URL = 'https://cold-salad-f18d.xuenuo1943.workers.dev';
+        
         // 初始化
         init();
         
-        // 检查同步数据
-        checkForSyncData();
+        // 自动从 Worker 加载进度
+        loadFromWorker();
         
-        // 加载本地进度
+        // 加载本地进度（备用）
         loadProgress();
-        
-        // 保存进度 - 生成数据供同步
-        
-        // 保存进度 - 自动同步到 GitHub
         async function saveProgress() {
             const data = {
                 vocabStatus: vocabStatus,
                 lastUpdated: new Date().toISOString()
             };
             
-            const jsonStr = JSON.stringify(data, null, 2);
+            const jsonStr = JSON.stringify(data);
             
             // 保存到 localStorage
             localStorage.setItem('englishVocabStatus', jsonStr);
             
-            // 生成一个同步链接（数据编码在 URL 中）
-            const encodedData = btoa(encodeURIComponent(jsonStr));
-            const syncUrl = `https://snow1943.github.io/english-learning/?sync=${encodedData}`;
-            
-            // 复制链接到剪贴板
+            // 尝试同步到 Worker
             try {
-                await navigator.clipboard.writeText(syncUrl);
-                alert('✅ 进度已保存！\n\n同步链接已复制，请发给我~');
+                const resp = await fetch(WORKER_URL + '/save', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: jsonStr
+                });
+                
+                if (resp.ok) {
+                    alert('✅ 进度已保存到云端！');
+                } else {
+                    alert('⚠️ 云端同步失败，已保存到本地');
+                }
             } catch (e) {
-                alert('✅ 进度已保存到本地！\n\n同步链接：\n' + syncUrl + '\n\n请把这个链接发给我~');
+                console.error('同步失败:', e);
+                alert('⚠️ 云端同步失败，已保存到本地');
             }
         }
         
-        // 检查是否有同步数据在 URL 中
+        // 从 Worker 加载进度
+        async function loadFromWorker() {
+            try {
+                const resp = await fetch(WORKER_URL + '/load');
+                if (resp.ok) {
+                    const data = await resp.json();
+                    if (data.vocabStatus) {
+                        vocabStatus = data.vocabStatus;
+                        localStorage.setItem('englishVocabStatus', JSON.stringify(data));
+                        console.log('✅ 已从云端加载词汇进度');
+                    }
+                }
+            } catch (e) {
+                console.log('从云端加载失败，使用本地数据');
+            }
+        }
+        
+        // 检查是否有同步数据在 URL 中（备用）
         function checkForSyncData() {
             const params = new URLSearchParams(window.location.search);
             const syncData = params.get('sync');
@@ -996,7 +1018,6 @@
                         alert('✅ 已同步词汇进度！');
                     }
                     
-                    // 清除 URL 中的参数
                     window.history.replaceState({}, document.title, window.location.pathname);
                 } catch (e) {
                     console.error('同步数据解析失败:', e);

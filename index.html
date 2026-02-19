@@ -13,8 +13,12 @@
             --text: #1F2937;
             --text-light: #6B7280;
             --highlight: #FEF3C7;
-            -- mastered: #D1FAE5;
+            --mastered: #D1FAE5;
             --learning: #DBEAFE;
+        }
+        
+        * {
+            box-sizing: border-box;
         }
         
         body {
@@ -46,19 +50,24 @@
             font-size: 14px;
         }
         
-        .article-card {
+        .streak {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #FEF3C7;
+            padding: 6px 12px;
+            border-radius: 20px;
+            color: #D97706;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+        
+        .card {
             background: var(--card);
             border-radius: 12px;
             padding: 24px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             margin-bottom: 20px;
-        }
-        
-        .article-meta {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
         }
         
         .tag {
@@ -75,71 +84,98 @@
             color: #DB2777;
         }
         
-        .article-content {
-            font-size: 16px;
-            line-height: 1.8;
-        }
-        
-        .vocab-item {
-            cursor: pointer;
-            border-bottom: 2px solid var(--highlight);
-            padding: 2px 0;
-            transition: all 0.2s;
-            position: relative;
-        }
-        
-        .vocab-item:hover {
-            background: var(--highlight);
-        }
-        
-        .vocab-item.mastered {
-            border-bottom-color: var(--mastered);
-            background: var(--mastered);
-        }
-        
-        .vocab-item .tooltip {
-            display: none;
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--text);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 13px;
-            white-space: nowrap;
-            z-index: 100;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-        
-        .vocab-item:hover .tooltip {
-            display: block;
-        }
-        
-        .vocab-item .tooltip::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 6px solid transparent;
-            border-top-color: var(--text);
-        }
-        
-        .vocab-actions {
+        /* 步骤导航 */
+        .steps {
             display: flex;
             gap: 8px;
-            margin-top: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .step {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px;
+            text-align: center;
+            background: #E5E7EB;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-light);
+            transition: all 0.3s;
+        }
+        
+        .step.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .step.completed {
+            background: var(--mastered);
+            color: var(--secondary);
+        }
+        
+        /* 词汇卡片 */
+        .vocab-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .vocab-word {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+        
+        .vocab-phonetic {
+            font-size: 18px;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+        
+        .vocab-definition {
+            font-size: 18px;
+            color: var(--text);
+            margin-bottom: 16px;
+            padding: 16px;
+            background: var(--learning);
+            border-radius: 8px;
+        }
+        
+        .vocab-example {
+            font-style: italic;
+            color: var(--text-light);
+            margin-bottom: 24px;
+        }
+        
+        .vocab-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
         }
         
         .btn {
-            padding: 8px 16px;
+            padding: 12px 24px;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 15px;
+            font-weight: 500;
             transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
         }
         
         .btn-primary {
@@ -154,47 +190,204 @@
         
         .btn-outline {
             background: transparent;
-            border: 1px solid #D1D5DB;
+            border: 2px solid #D1D5DB;
             color: var(--text);
         }
         
-        .btn:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
+        .btn-danger {
+            background: #EF4444;
+            color: white;
         }
         
-        .quiz-section {
-            background: var(--card);
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            margin-top: 20px;
-            display: none;
+        .btn-success {
+            background: var(--secondary);
+            color: white;
         }
         
-        .quiz-section.active {
-            display: block;
+        /* 进度指示器 */
+        .progress-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 20px 0;
         }
         
-        .quiz-question {
+        .progress-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #D1D5DB;
+            transition: all 0.3s;
+        }
+        
+        .progress-dot.current {
+            background: var(--primary);
+            transform: scale(1.3);
+        }
+        
+        .progress-dot.mastered {
+            background: var(--secondary);
+        }
+        
+        .progress-dot.learning {
+            background: #F59E0B;
+        }
+        
+        /* 文章内容 */
+        .article-content {
+            font-size: 17px;
+            line-height: 1.9;
+        }
+        
+        .article-content p {
             margin-bottom: 16px;
         }
         
-        .quiz-options {
+        .vocab-highlight {
+            cursor: pointer;
+            border-bottom: 2px dashed var(--primary);
+            padding: 0 2px;
+            transition: all 0.2s;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .vocab-highlight:hover {
+            background: var(--highlight);
+        }
+        
+        .vocab-highlight.mastered {
+            border-bottom-color: var(--secondary);
+            background: var(--mastered);
+        }
+        
+        .vocab-highlight.learning {
+            background: var(--highlight);
+        }
+        
+        /* 弹窗 */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .popup-overlay.active {
             display: flex;
-            flex-direction: column;
+        }
+        
+        .popup-content {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 400px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+        
+        .popup-word {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .popup-phonetic {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+        
+        .popup-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-light);
+            padding: 0;
+            line-height: 1;
+        }
+        
+        .popup-meaning {
+            margin-bottom: 16px;
+        }
+        
+        .popup-example {
+            font-style: italic;
+            color: var(--text-light);
+            padding: 12px;
+            background: #F3F4F6;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .popup-actions {
+            display: flex;
             gap: 8px;
         }
         
+        /* 测试题 */
+        .quiz-container {
+            margin-top: 24px;
+        }
+        
+        .quiz-question {
+            margin-bottom: 20px;
+            padding: 16px;
+            background: #F3F4F6;
+            border-radius: 12px;
+        }
+        
+        .quiz-question p {
+            margin: 0 0 12px 0;
+            font-weight: 600;
+        }
+        
         .quiz-option {
-            padding: 12px;
+            display: block;
+            width: 100%;
+            padding: 12px 16px;
+            margin-bottom: 8px;
             border: 2px solid #E5E7EB;
             border-radius: 8px;
+            background: white;
             cursor: pointer;
+            text-align: left;
+            font-size: 15px;
             transition: all 0.2s;
         }
         
-        .quiz-option:hover {
+        .quiz-option:hover:not(:disabled) {
+            border-color: var(--primary);
+            background: var(--learning);
+        }
+        
+        .quiz-option.selected {
             border-color: var(--primary);
             background: var(--learning);
         }
@@ -207,6 +400,10 @@
         .quiz-option.wrong {
             border-color: #EF4444;
             background: #FEE2E2;
+        }
+        
+        .quiz-option:disabled {
+            cursor: default;
         }
         
         .progress-bar {
@@ -223,22 +420,55 @@
             transition: width 0.3s;
         }
         
-        footer {
-            text-align: center;
-            margin-top: 40px;
-            color: var(--text-light);
-            font-size: 13px;
+        /* 底部操作 */
+        .actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
         }
         
-        .streak {
-            display: inline-flex;
+        /* 加载动画 */
+        .loading {
+            display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 6px;
-            background: #FEF3C7;
-            padding: 6px 12px;
-            border-radius: 20px;
-            color: #D97706;
-            font-weight: 500;
+            justify-content: center;
+            padding: 40px;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #E5E7EB;
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        /* 响应式 */
+        @media (max-width: 600px) {
+            .vocab-word {
+                font-size: 28px;
+            }
+            
+            .vocab-card {
+                padding: 20px;
+            }
+            
+            .btn {
+                padding: 10px 16px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -250,54 +480,126 @@
             <div class="streak">🔥 Day 1 Streak</div>
         </header>
         
-        <div class="article-card">
-            <div class="article-meta">
-                <span class="tag">B1</span>
-                <span class="tag interest">Tech</span>
-                <span class="tag">234 words</span>
+        <!-- 步骤导航 -->
+        <div class="steps">
+            <div class="step active" id="stepVocab">1. 词汇预习</div>
+            <div class="step" id="stepArticle">2. 阅读文章</div>
+            <div class="step" id="stepQuiz">3. 小测试</div>
+        </div>
+        
+        <!-- 词汇预习阶段 -->
+        <div id="vocabPhase">
+            <div class="vocab-card" id="vocabCard">
+                <div class="vocab-word" id="vocabWord">Loading...</div>
+                <div class="vocab-phonetic" id="vocabPhonetic"></div>
+                <div class="vocab-definition" id="vocabDefinition"></div>
+                <div class="vocab-example" id="vocabExample"></div>
+                
+                <div class="vocab-buttons">
+                    <button class="btn btn-outline" onclick="playAudio()">🔊 朗读</button>
+                    <button class="btn btn-danger" onclick="markUnknown()">❌ 不认识</button>
+                    <button class="btn btn-success" onclick="markKnown()">✅ 认识</button>
+                </div>
             </div>
             
-            <div class="article-content" id="articleContent">
-                <p>Artificial Intelligence is changing how we live and work. <span class="vocab-item" data-word="Artificial Intelligence" data-def="人工智能 (n.)">Artificial Intelligence</span> refers to computer systems that can perform tasks that typically require human intelligence.</p>
-                
-                <p>One exciting area is <span class="vocab-item" data-word="generative" data-def="生成的; 生成的 (adj.)">generative</span> AI, which can create new content like text, images, and even music. Tools like ChatGPT have made this technology accessible to everyone.</p>
-                
-                <p>However, experts warn about the challenges. <span class="vocab-item" data-word="ethical" data-def="道德的; 伦理的 (adj.)">ethical</span> questions arise when AI makes important decisions. We need to ensure these systems are <span class="vocab-item" data-word="fair" data-def="公平的 (adj.)">fair</span> and <span class="vocab-item" data-word="transparent" data-def="透明的; 直率的 (adj.)">transparent</span>.</p>
-                
-                <p>The future of AI looks promising. With <span class="vocab-item" data-word="responsible" data-def="负责任的 (adj.)">responsible</span> development, it can help solve problems in healthcare, climate change, and education.</p>
-            </div>
+            <div class="progress-dots" id="vocabProgress"></div>
             
-            <div class="vocab-actions">
-                <button class="btn btn-outline" onclick="toggleQuiz()">📝 Take Quiz</button>
-                <button class="btn btn-outline" onclick="markAllKnown()">✓ I Know These</button>
+            <div class="actions">
+                <button class="btn btn-primary" onclick="skipToArticle()">跳过 → 阅读文章</button>
             </div>
         </div>
         
-        <div class="quiz-section" id="quizSection">
-            <h3>🧠 Quick Quiz</h3>
-            <div class="progress-bar">
-                <div class="progress-fill" id="quizProgress" style="width: 0%"></div>
-            </div>
-            
-            <div id="quizQuestions"></div>
-            
-            <button class="btn btn-primary" onclick="showResults()" id="showResultsBtn" style="display:none; margin-top: 16px;">See Results</button>
-            
-            <div id="quizResults" style="display:none; text-align: center;">
-                <h4>🎉 Great job!</h4>
-                <p>You got <span id="scoreDisplay">0</span> out of <span id="totalDisplay">0</span> correct!</p>
-                <button class="btn btn-primary" onclick="resetQuiz()">Try Again</button>
+        <!-- 阅读文章阶段 -->
+        <div id="articlePhase" class="hidden">
+            <div class="card">
+                <div class="flex gap-3 mb-4" style="display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
+                    <span class="tag">B1</span>
+                    <span class="tag interest">Tech</span>
+                    <span class="tag">234 words</span>
+                </div>
+                
+                <div class="article-content" id="articleContent">
+                    <p>Artificial Intelligence is changing how we live and work. <span class="vocab-highlight learning" data-word="Artificial Intelligence" onclick="showWordPopup('Artificial Intelligence')">Artificial Intelligence</span> refers to computer systems that can perform tasks that typically require human intelligence.</p>
+                    
+                    <p>One exciting area is <span class="vocab-highlight learning" data-word="generative" onclick="showWordPopup('generative')">generative</span> AI, which can create new content like text, images, and even music. Tools like ChatGPT have made this technology accessible to everyone.</p>
+                    
+                    <p>However, experts warn about the challenges. <span class="vocab-highlight learning" data-word="ethical" onclick="showWordPopup('ethical')">ethical</span> questions arise when AI makes important decisions. We need to ensure these systems are <span class="vocab-highlight learning" data-word="fair" onclick="showWordPopup('fair')">fair</span> and <span class="vocab-highlight learning" data-word="transparent" onclick="showWordPopup('transparent')">transparent</span>.</p>
+                    
+                    <p>The future of AI looks promising. With <span class="vocab-highlight learning" data-word="responsible" onclick="showWordPopup('responsible')">responsible</span> development, it can help solve problems in healthcare, climate change, and education.</p>
+                </div>
+                
+                <div class="actions">
+                    <button class="btn btn-outline" onclick="playArticleAudio()">🔊 朗读文章</button>
+                    <button class="btn btn-primary" onclick="goToQuiz()">📝 开始测试</button>
+                </div>
             </div>
         </div>
         
-        <footer>
-            <p>Built with ❤️ for Nova's English Learning</p>
-            <p>Powered by AI + Spaced Repetition</p>
-        </footer>
+        <!-- 测试阶段 -->
+        <div id="quizPhase" class="hidden">
+            <div class="card">
+                <h3>🧠 快速测试</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="quizProgress" style="width: 0%"></div>
+                </div>
+                
+                <div id="quizContainer">
+                    <div class="quiz-question" id="questionContainer">
+                        <p id="questionText"></p>
+                        <div id="optionsContainer"></div>
+                    </div>
+                </div>
+                
+                <div id="quizResult" class="hidden" style="text-align: center; padding: 20px;">
+                    <h4>🎉 测试完成！</h4>
+                    <p>你答对了 <span id="scoreDisplay">0</span> / <span id="totalDisplay">0</span> 题</p>
+                    <button class="btn btn-primary" onclick="restartQuiz()">再试一次</button>
+                    <button class="btn btn-outline" onclick="goToArticle()">返回文章</button>
+                </div>
+                
+                <div class="actions hidden" id="quizActions">
+                    <button class="btn btn-primary" id="nextQuestionBtn" onclick="nextQuestion()">下一题</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 词义弹窗 -->
+        <div class="popup-overlay" id="wordPopup">
+            <div class="popup-content">
+                <div class="popup-header">
+                    <div>
+                        <div class="popup-word" id="popupWord"></div>
+                        <div class="popup-phonetic" id="popupPhonetic"></div>
+                    </div>
+                    <button class="popup-close" onclick="closePopup()">&times;</button>
+                </div>
+                <div class="popup-meaning" id="popupMeaning"></div>
+                <div class="popup-example" id="popupExample"></div>
+                <div class="popup-actions">
+                    <button class="btn btn-outline" onclick="playPopupAudio()">🔊 发音</button>
+                    <button class="btn btn-success" onclick="markWordKnown()">✅ 认识</button>
+                </div>
+            </div>
+        </div>
     </div>
     
     <script>
-        const quizData = [
+        // 词汇数据
+        const vocabList = [
+            { word: 'Artificial Intelligence', phonetic: '/ˌɑːrtɪfɪʃl ɪnˈtelɪdʒəns/', definition: '人工智能', partOfSpeech: 'n.', example: 'Artificial Intelligence is changing our world.' },
+            { word: 'generative', phonetic: '/ˈdʒenərətɪv/', definition: '生成的', partOfSpeech: 'adj.', example: 'Generative AI can create new content.' },
+            { word: 'ethical', phonetic: '/ˈeθɪkl/', definition: '道德的，伦理的', partOfSpeech: 'adj.', example: 'We need to consider ethical questions.' },
+            { word: 'fair', phonetic: '/fer/', definition: '公平的', partOfSpeech: 'adj.', example: 'The decision must be fair to everyone.' },
+            { word: 'transparent', phonetic: '/trænsˈpærənt/', definition: '透明的', partOfSpeech: 'adj.', example: 'The process should be transparent.' },
+            { word: 'responsible', phonetic: '/rɪˈspɑːnsəbl/', definition: '负责任的', partOfSpeech: 'adj.', example: 'We must be responsible for our actions.' }
+        ];
+        
+        // 当前词汇索引
+        let currentVocabIndex = 0;
+        let vocabStatus = {}; // word -> 'known' | 'unknown'
+        
+        // 测试题数据
+        const quizQuestions = [
             {
                 question: "What does 'Artificial Intelligence' refer to?",
                 options: [
@@ -327,104 +629,304 @@
                     "Because AI speaks languages"
                 ],
                 correct: 1
+            },
+            {
+                question: "What does it mean for AI to be 'transparent'?",
+                options: [
+                    "It is invisible",
+                    "Its decision-making process is open and understandable",
+                    "It uses glass technology",
+                    "It is very expensive"
+                ],
+                correct: 1
+            },
+            {
+                question: "What is required for 'responsible' AI development?",
+                options: [
+                    "Making money",
+                    "Considering the impact on people and society",
+                    "Building faster systems",
+                    "Using more data"
+                ],
+                correct: 1
             }
         ];
         
         let currentQuestion = 0;
         let score = 0;
+        let selectedAnswer = null;
         
-        function toggleQuiz() {
-            const section = document.getElementById('quizSection');
-            section.classList.toggle('active');
-            if (section.classList.contains('active') && currentQuestion === 0) {
-                showQuestion();
+        // 初始化
+        function init() {
+            renderVocabProgress();
+            showCurrentVocab();
+        }
+        
+        // 显示词汇进度点
+        function renderVocabProgress() {
+            const container = document.getElementById('vocabProgress');
+            container.innerHTML = '';
+            vocabList.forEach((vocab, index) => {
+                const dot = document.createElement('div');
+                dot.className = 'progress-dot';
+                if (index === currentVocabIndex) dot.classList.add('current');
+                else if (vocabStatus[vocab.word] === 'known') dot.classList.add('mastered');
+                else if (vocabStatus[vocab.word] === 'unknown') dot.classList.add('learning');
+                container.appendChild(dot);
+            });
+        }
+        
+        // 显示当前词汇
+        function showCurrentVocab() {
+            if (currentVocabIndex >= vocabList.length) {
+                skipToArticle();
+                return;
+            }
+            
+            const vocab = vocabList[currentVocabIndex];
+            document.getElementById('vocabWord').textContent = vocab.word;
+            document.getElementById('vocabPhonetic').textContent = vocab.phonetic;
+            document.getElementById('vocabDefinition').textContent = vocab.partOfSpeech + ' ' + vocab.definition;
+            document.getElementById('vocabExample').textContent = '"' + vocab.example + '"';
+            
+            renderVocabProgress();
+        }
+        
+        // 朗读单词
+        function playAudio() {
+            const vocab = vocabList[currentVocabIndex];
+            speak(vocab.word);
+        }
+        
+        // 使用 Web Speech API 朗读
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.8;
+                speechSynthesis.speak(utterance);
             }
         }
         
-        function showQuestion() {
-            const q = quizData[currentQuestion];
-            const container = document.getElementById('quizQuestions');
-            container.innerHTML = `
-                <div class="quiz-question">
-                    <p><strong>Question ${currentQuestion + 1}:</strong> ${q.question}</p>
-                    <div class="quiz-options">
-                        ${q.options.map((opt, i) => `
-                            <div class="quiz-option" onclick="selectAnswer(${i})">${opt}</div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-            
-            document.getElementById('quizProgress').style.width = 
-                ((currentQuestion) / quizData.length * 100) + '%';
+        // 标记为不认识
+        function markUnknown() {
+            const vocab = vocabList[currentVocabIndex];
+            vocabStatus[vocab.word] = 'unknown';
+            currentVocabIndex++;
+            showCurrentVocab();
         }
         
-        function selectAnswer(selectedIndex) {
-            const q = quizData[currentQuestion];
+        // 标记为认识
+        function markKnown() {
+            const vocab = vocabList[currentVocabIndex];
+            vocabStatus[vocab.word] = 'known';
+            currentVocabIndex++;
+            showCurrentVocab();
+        }
+        
+        // 跳转到文章
+        function skipToArticle() {
+            document.getElementById('vocabPhase').classList.add('hidden');
+            document.getElementById('articlePhase').classList.remove('hidden');
+            document.getElementById('stepVocab').classList.add('completed');
+            document.getElementById('stepVocab').classList.remove('active');
+            document.getElementById('stepArticle').classList.add('active');
+        }
+        
+        // 返回词汇
+        function goToVocab() {
+            document.getElementById('articlePhase').classList.add('hidden');
+            document.getElementById('quizPhase').classList.add('hidden');
+            document.getElementById('vocabPhase').classList.remove('hidden');
+            document.getElementById('stepArticle').classList.remove('active');
+            document.getElementById('stepQuiz').classList.remove('active');
+            document.getElementById('stepVocab').classList.add('active');
+        }
+        
+        // 朗读文章
+        function playArticleAudio() {
+            const articleContent = document.getElementById('articleContent');
+            const text = articleContent.innerText;
+            speak(text);
+        }
+        
+        // 显示单词弹窗
+        async function showWordPopup(word) {
+            const popup = document.getElementById('wordPopup');
+            popup.classList.add('active');
+            
+            document.getElementById('popupWord').textContent = word;
+            document.getElementById('popupPhonetic').textContent = 'Loading...';
+            document.getElementById('popupMeaning').textContent = 'Loading...';
+            document.getElementById('popupExample').textContent = '';
+            
+            // 查词
+            try {
+                const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+                const data = await response.json();
+                
+                if (Array.isArray(data) && data.length > 0) {
+                    const entry = data[0];
+                    const phonetic = entry.phonetic || (entry.phonetics && entry.phonetics[0] ? entry.phonetics[0].text : '');
+                    document.getElementById('popupPhonetic').textContent = phonetic;
+                    
+                    if (entry.meanings && entry.meanings.length > 0) {
+                        const meaning = entry.meanings[0];
+                        const definition = meaning.definitions && meaning.definitions[0] ? meaning.definitions[0].definition : '';
+                        document.getElementById('popupMeaning').textContent = meaning.partOfSpeech + ' ' + definition;
+                        
+                        const example = meaning.definitions && meaning.definitions[0] ? meaning.definitions[0].example : '';
+                        if (example) {
+                            document.getElementById('popupExample').textContent = '"' + example + '"';
+                        }
+                    }
+                }
+            } catch (e) {
+                // 使用本地数据
+                const localVocab = vocabList.find(v => v.word.toLowerCase() === word.toLowerCase());
+                if (localVocab) {
+                    document.getElementById('popupPhonetic').textContent = localVocab.phonetic;
+                    document.getElementById('popupMeaning').textContent = localVocab.partOfSpeech + ' ' + localVocab.definition;
+                    document.getElementById('popupExample').textContent = '"' + localVocab.example + '"';
+                } else {
+                    document.getElementById('popupPhonetic').textContent = '';
+                    document.getElementById('popupMeaning').textContent = '未找到释义';
+                }
+            }
+        }
+        
+        // 关闭弹窗
+        function closePopup() {
+            document.getElementById('wordPopup').classList.remove('active');
+        }
+        
+        // 弹窗内发音
+        function playPopupAudio() {
+            const word = document.getElementById('popupWord').textContent;
+            speak(word);
+        }
+        
+        // 弹窗内标记认识
+        function markWordKnown() {
+            const word = document.getElementById('popupWord').textContent;
+            
+            // 更新文章中的标记
+            document.querySelectorAll('.vocab-highlight').forEach(el => {
+                if (el.dataset.word.toLowerCase() === word.toLowerCase()) {
+                    el.classList.add('mastered');
+                    el.classList.remove('learning');
+                }
+            });
+            
+            closePopup();
+        }
+        
+        // 去测试
+        function goToQuiz() {
+            document.getElementById('articlePhase').classList.add('hidden');
+            document.getElementById('quizPhase').classList.remove('hidden');
+            document.getElementById('stepArticle').classList.add('completed');
+            document.getElementById('stepArticle').classList.remove('active');
+            document.getElementById('stepQuiz').classList.add('active');
+            
+            currentQuestion = 0;
+            score = 0;
+            showQuestion();
+        }
+        
+        // 返回文章
+        function goToArticle() {
+            document.getElementById('quizPhase').classList.add('hidden');
+            document.getElementById('articlePhase').classList.remove('hidden');
+            document.getElementById('stepQuiz').classList.remove('active');
+            document.getElementById('stepArticle').classList.add('active');
+        }
+        
+        // 显示问题
+        function showQuestion() {
+            if (currentQuestion >= quizQuestions.length) {
+                showQuizResult();
+                return;
+            }
+            
+            const q = quizQuestions[currentQuestion];
+            document.getElementById('questionText').textContent = `问题 ${currentQuestion + 1}: ${q.question}`;
+            
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+            
+            q.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-option';
+                btn.textContent = option;
+                btn.onclick = () => selectAnswer(index);
+                container.appendChild(btn);
+            });
+            
+            document.getElementById('quizProgress').style.width = ((currentQuestion) / quizQuestions.length * 100) + '%';
+            document.getElementById('quizActions').classList.add('hidden');
+            document.getElementById('quizResult').classList.add('hidden');
+            document.getElementById('questionContainer').classList.remove('hidden');
+            
+            selectedAnswer = null;
+        }
+        
+        // 选择答案
+        function selectAnswer(index) {
+            if (selectedAnswer !== null) return; // 防止重复选择
+            
+            selectedAnswer = index;
+            const q = quizQuestions[currentQuestion];
             const options = document.querySelectorAll('.quiz-option');
             
             options.forEach((opt, i) => {
-                opt.style.pointerEvents = 'none';
+                opt.disabled = true;
                 if (i === q.correct) {
                     opt.classList.add('correct');
-                } else if (i === selectedIndex && i !== q.correct) {
+                } else if (i === index && index !== q.correct) {
                     opt.classList.add('wrong');
                 }
             });
             
-            if (selectedIndex === q.correct) {
+            if (index === q.correct) {
                 score++;
             }
             
-            setTimeout(() => {
-                currentQuestion++;
-                if (currentQuestion < quizData.length) {
-                    showQuestion();
-                } else {
-                    document.getElementById('showResultsBtn').style.display = 'inline-block';
-                }
-            }, 1000);
+            document.getElementById('quizActions').classList.remove('hidden');
         }
         
-        function showResults() {
-            document.getElementById('quizQuestions').style.display = 'none';
-            document.getElementById('showResultsBtn').style.display = 'none';
-            document.getElementById('quizResults').style.display = 'block';
-            document.getElementById('scoreDisplay').textContent = score;
-            document.getElementById('totalDisplay').textContent = quizData.length;
-            document.getElementById('quizProgress').style.width = '100%';
-        }
-        
-        function resetQuiz() {
-            currentQuestion = 0;
-            score = 0;
-            document.getElementById('quizQuestions').style.display = 'block';
-            document.getElementById('quizResults').style.display = 'none';
-            document.getElementById('showResultsBtn').style.display = 'none';
+        // 下一题
+        function nextQuestion() {
+            currentQuestion++;
             showQuestion();
         }
         
-        function markAllKnown() {
-            const items = document.querySelectorAll('.vocab-item');
-            items.forEach(item => {
-                item.classList.add('mastered');
-            });
-            alert('Great! You marked all words as known. Keep up the good work! 💪');
+        // 显示结果
+        function showQuizResult() {
+            document.getElementById('questionContainer').classList.add('hidden');
+            document.getElementById('quizActions').classList.add('hidden');
+            document.getElementById('quizResult').classList.remove('hidden');
+            document.getElementById('scoreDisplay').textContent = score;
+            document.getElementById('totalDisplay').textContent = quizQuestions.length;
+            document.getElementById('quizProgress').style.width = '100%';
         }
         
-        // Click on vocab words
-        document.querySelectorAll('.vocab-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const word = this.dataset.word;
-                const def = this.dataset.def;
-                
-                // In a real app, this would use TTS API
-                console.log('Clicked:', word, '- Definition:', def);
-                
-                // Toggle mastered state
-                this.classList.toggle('mastered');
-            });
+        // 重试
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            showQuestion();
+        }
+        
+        // 点击弹窗外部关闭
+        document.getElementById('wordPopup').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePopup();
+            }
         });
+        
+        // 初始化
+        init();
     </script>
 </body>
 </html>

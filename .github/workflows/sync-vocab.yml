@@ -1,0 +1,21 @@
+name: Sync Vocab Progress
+
+on:
+  workflow_dispatch:
+    inputs:
+      vocabData:
+        description: 'Vocabulary progress data (JSON)'
+        required: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update vocab progress file
+        run: |
+          echo '${{ github.event.inputs.vocabData }}' > vocab-progress.json
+      - name: Commit and push
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_messageUpdate vocab: " progress"
+          file_pattern: vocab-progress.json

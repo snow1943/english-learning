@@ -946,13 +946,16 @@
         // 初始化
         init();
         
+        // 检查同步数据
+        checkForSyncData();
+        
         // 加载本地进度
         loadProgress();
         
         // 保存进度 - 生成数据供同步
         
-        // 保存进度 - 生成数据供同步
-        function saveProgress() {
+        // 保存进度 - 自动同步到 GitHub
+        async function saveProgress() {
             const data = {
                 vocabStatus: vocabStatus,
                 lastUpdated: new Date().toISOString()
@@ -963,12 +966,42 @@
             // 保存到 localStorage
             localStorage.setItem('englishVocabStatus', jsonStr);
             
-            // 复制到剪贴板
-            navigator.clipboard.writeText(jsonStr).then(() => {
-                alert('✅ 进度已保存到本地！\n\n词汇数据已复制到剪贴板，请发给 Nova，我会帮你同步到云端~');
-            }).catch(() => {
-                alert('✅ 进度已保存到本地！\n\n数据：\n' + jsonStr);
-            });
+            // 生成一个同步链接（数据编码在 URL 中）
+            const encodedData = btoa(encodeURIComponent(jsonStr));
+            const syncUrl = `https://snow1943.github.io/english-learning/?sync=${encodedData}`;
+            
+            // 复制链接到剪贴板
+            try {
+                await navigator.clipboard.writeText(syncUrl);
+                alert('✅ 进度已保存！\n\n同步链接已复制，请发给我~');
+            } catch (e) {
+                alert('✅ 进度已保存到本地！\n\n同步链接：\n' + syncUrl + '\n\n请把这个链接发给我~');
+            }
+        }
+        
+        // 检查是否有同步数据在 URL 中
+        function checkForSyncData() {
+            const params = new URLSearchParams(window.location.search);
+            const syncData = params.get('sync');
+            
+            if (syncData) {
+                try {
+                    const jsonStr = decodeURIComponent(atob(syncData));
+                    const data = JSON.parse(jsonStr);
+                    
+                    if (data.vocabStatus) {
+                        vocabStatus = data.vocabStatus;
+                        localStorage.setItem('englishVocabStatus', JSON.stringify(data));
+                        console.log('✅ 已从同步链接加载词汇进度');
+                        alert('✅ 已同步词汇进度！');
+                    }
+                    
+                    // 清除 URL 中的参数
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                } catch (e) {
+                    console.error('同步数据解析失败:', e);
+                }
+            }
         }
         
         // 从本地加载进度

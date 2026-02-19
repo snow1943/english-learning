@@ -973,14 +973,16 @@
                     body: jsonStr
                 });
                 
-                if (resp.ok) {
+                const result = await resp.json();
+                
+                if (resp.ok && result.success !== false) {
                     alert('✅ 进度已保存到云端！');
                 } else {
-                    alert('⚠️ 云端同步失败，已保存到本地');
+                    alert('⚠️ 云端同步失败\n错误: ' + (result.status || result.error || '未知错误') + '\n\n已保存到本地');
                 }
             } catch (e) {
                 console.error('同步失败:', e);
-                alert('⚠️ 云端同步失败，已保存到本地');
+                alert('⚠️ 云端同步失败: ' + e.message + '\n\n已保存到本地');
             }
         }
         

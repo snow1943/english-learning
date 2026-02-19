@@ -519,13 +519,13 @@
                 </div>
                 
                 <div class="article-content" id="articleContent">
-                    <p>Artificial Intelligence is changing how we live and work. <span class="vocab-highlight learning" data-word="Artificial Intelligence" onclick="showWordPopup('Artificial Intelligence')">Artificial Intelligence</span> refers to computer systems that can perform tasks that typically require human intelligence.</p>
+                    <p id="articleText">Artificial Intelligence is changing how we live and work. It refers to computer systems that can perform tasks that typically require human intelligence.</p>
                     
-                    <p>One exciting area is <span class="vocab-highlight learning" data-word="generative" onclick="showWordPopup('generative')">generative</span> AI, which can create new content like text, images, and even music. Tools like ChatGPT have made this technology accessible to everyone.</p>
+                    <p>One exciting area is generative AI, which can create new content like text, images, and even music. Tools like ChatGPT have made this technology accessible to everyone.</p>
                     
-                    <p>However, experts warn about the challenges. <span class="vocab-highlight learning" data-word="ethical" onclick="showWordPopup('ethical')">ethical</span> questions arise when AI makes important decisions. We need to ensure these systems are <span class="vocab-highlight learning" data-word="fair" onclick="showWordPopup('fair')">fair</span> and <span class="vocab-highlight learning" data-word="transparent" onclick="showWordPopup('transparent')">transparent</span>.</p>
+                    <p>However, experts warn about the challenges. Ethical questions arise when AI makes important decisions. We need to ensure these systems are fair and transparent.</p>
                     
-                    <p>The future of AI looks promising. With <span class="vocab-highlight learning" data-word="responsible" onclick="showWordPopup('responsible')">responsible</span> development, it can help solve problems in healthcare, climate change, and education.</p>
+                    <p>The future of AI looks promising. With responsible development, it can help solve problems in healthcare, climate change, and education.</p>
                 </div>
                 
                 <div class="actions">
@@ -810,15 +810,32 @@
         function markWordKnown() {
             const word = document.getElementById('popupWord').textContent;
             
-            // 更新文章中的标记
-            document.querySelectorAll('.vocab-highlight').forEach(el => {
-                if (el.dataset.word.toLowerCase() === word.toLowerCase()) {
-                    el.classList.add('mastered');
-                    el.classList.remove('learning');
-                }
-            });
+            // 更新词汇卡片进度
+            if (!vocabStatus[word]) {
+                vocabStatus[word] = 'known';
+            }
+            
+            // 高亮文章中所有匹配的单词
+            highlightWordInArticle(word);
             
             closePopup();
+        }
+        
+        // 高亮文章中的单词
+        function highlightWordInArticle(word) {
+            const articleText = document.getElementById('articleText');
+            if (!articleText) return;
+            
+            // 获取文章文本
+            let html = articleText.innerHTML;
+            
+            // 创建正则匹配单词（不区分大小写）
+            const regex = new RegExp('\\b(' + word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')\\b', 'gi');
+            
+            // 替换为高亮 span
+            html = html.replace(regex, '<span class="vocab-highlight mastered" onclick="showWordPopup(\'$1\')">$1</span>');
+            
+            articleText.innerHTML = html;
         }
         
         // 去测试
@@ -927,6 +944,56 @@
         
         // 初始化
         init();
+        
+        // 文章文字点击功能 - 任意单词可点击
+        document.getElementById('articleContent').addEventListener('click', function(e) {
+            // 获取点击的文字
+            const selection = window.getSelection();
+            const selectedText = selection.toString().trim();
+            
+            if (selectedText && selectedText.length > 0 && selectedText.length < 30) {
+                // 检查是否是纯英文单词
+                if (/^[a-zA-Z\s'-]+$/.test(selectedText)) {
+                    const words = selectedText.split(/\s+/);
+                    if (words.length === 1 || (words.length === 2 && words[1].length < 4)) {
+                        // 单击或双击选中单个单词
+                        const word = selectedText.replace(/[^a-zA-Z'-]/g, '');
+                        if (word.length > 1) {
+                            showWordPopup(word);
+                        }
+                    }
+                }
+            }
+        });
+        
+        // 双击任意位置查词
+        document.getElementById('articleContent').addEventListener('dblclick', function(e) {
+            const selection = window.getSelection();
+            let selectedText = selection.toString().trim();
+            
+            if (selectedText) {
+                // 尝试获取光标所在的单词
+                const range = selection.getRangeAt(0);
+                const textNode = range.startContainer;
+                
+                if (textNode.nodeType === Node.TEXT_NODE) {
+                    const text = textNode.textContent;
+                    const start = range.startOffset;
+                    
+                    // 向前向后找单词边界
+                    let startIdx = start;
+                    let endIdx = start;
+                    
+                    while (startIdx > 0 && /[a-zA-Z]/.test(text[startIdx - 1])) startIdx--;
+                    while (endIdx < text.length && /[a-zA-Z]/.test(text[endIdx])) endIdx++;
+                    
+                    const word = text.substring(startIdx, endIdx);
+                    if (word.length > 1) {
+                        showWordPopup(word);
+                    }
+                }
+            }
+        });
     </script>
 </body>
 </html>

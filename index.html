@@ -991,9 +991,10 @@
             try {
                 const resp = await fetch(WORKER_URL + '/load');
                 if (resp.ok) {
-                    const data = await resp.json();
-                    if (data.vocabStatus) {
-                        vocabStatus = data.vocabStatus;
+                    const text = await resp.text();
+                    if (text && text.length > 2) {
+                        const data = JSON.parse(text);
+                        vocabStatus = data.vocabStatus || {};
                         localStorage.setItem('englishVocabStatus', JSON.stringify(data));
                         console.log('✅ 已从云端加载词汇进度');
                     }

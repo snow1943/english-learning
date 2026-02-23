@@ -514,24 +514,22 @@
             <div class="card">
                 <div class="flex gap-3 mb-4" style="display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
                     <span class="tag">B1</span>
-                    <span class="tag interest">Tech</span>
-                    <span class="tag">202 words</span>
+                    <span class="tag interest">Health</span>
+                    <span class="tag">198 words</span>
                 </div>
                 
                 <div class="article-content" id="articleContent">
-                    <p id="articleText">People have very different opinions about Artificial Intelligence. Some love it. Some think it's just marketing hype. Who's right?</p>
+                    <p id="articleText">A new AI system is helping doctors find cancer earlier than before. The system looks at medical pictures and finds small problems that human doctors might miss.</p>
                     
-                    <p>Tech leaders say AI will change how we work. But critics say it's all exaggeration. The interesting thing is: both sides might be correct. Why? It depends on how you use AI.</p>
+                    <p>Doctor Sarah Lee works at a hospital in New York. She says: "The AI system is like a second pair of eyes. It helps us see things we might not notice."</p>
                     
-                    <p>Most people use free AI for simple tasks: making lists, planning trips, writing short emails. These tools are helpful but limited.</p>
+                    <p>The system learns from millions of medical pictures. It can find small changes in the body that may mean cancer is starting. Finding cancer early is very important. When doctors find cancer early, patients have a much better chance of getting well.</p>
                     
-                    <p>But paid AI versions are different. They can do more complex work. For example, some paid AI can write computer code. It can build apps and make decisions about design.</p>
+                    <p>"The AI does not replace doctors," says Doctor Lee. "It helps us do our job better. We still make the final decision about each patient."</p>
                     
-                    <p>"They're like comparing an inexperienced intern with a seasoned professional," says one expert. Free AI is good at summaries. Paid AI can do deep research.</p>
+                    <p>Many hospitals are now using this new system. The government says it wants all hospitals to have AI help by 2028.</p>
                     
-                    <p>Some investors say AI will soon replace most computer jobs. They say AI can already write thousands of lines of code and test apps. But other experts are skeptical. They say these claims are exaggerated.</p>
-                    
-                    <p>The answer is probably somewhere in the middle. AI is a powerful tool, but it's not perfect. It will change some jobs, but not all of them.</p>
+                    <p>Some patients are happy about the new technology. "I'm glad the doctors have better tools now," says one patient. "It makes me feel safer."</p>
                 </div>
                 
                 <div class="actions">
@@ -593,14 +591,16 @@
     <script>
         // 词汇数据
         const vocabList = [
-            { word: 'artificial intelligence', phonetic: '/ˌɑːrtɪfɪʃl ɪnˈtelɪdʒəns/', definition: '人工智能', partOfSpeech: 'n.', example: 'Artificial intelligence is changing how we work.' },
-            { word: 'hype', phonetic: '/haɪp/', definition: '炒作，过度宣传', partOfSpeech: 'n.', example: 'There is too much hype around AI these days.' },
-            { word: 'skeptical', phonetic: '/ˈskeptɪkl/', definition: '怀疑的', partOfSpeech: 'adj.', example: 'Many experts are skeptical about AI predictions.' },
-            { word: 'spectrum', phonetic: '/ˈspektrəm/', definition: '范围，频谱', partOfSpeech: 'n.', example: 'People have a wide spectrum of opinions on AI.' },
-            { word: 'subscription', phonetic: '/səbˈskrɪpʃn/', definition: '订阅，付费服务', partOfSpeech: 'n.', example: 'I have a monthly subscription to the AI tool.' },
-            { word: 'intern', phonetic: '/ˈɪntɜːrn/', definition: '实习生', partOfSpeech: 'n.', example: 'The new intern is learning quickly.' },
-            { word: 'seasoned', phonetic: '/ˈsiːsnd/', definition: '经验丰富的', partOfSpeech: 'adj.', example: 'She is a seasoned professional in this field.' },
-            { word: 'exaggerate', phonetic: '/ɪɡˈzædʒəreɪt/', definition: '夸大，夸张', partOfSpeech: 'v.', example: 'You should not exaggerate the capabilities of AI.' }
+            { word: 'cancer', phonetic: '/ˈkænsər/', definition: '癌症', partOfSpeech: 'n.', example: 'Cancer is a serious disease.' },
+            { word: 'doctor', phonetic: '/ˈdɑːktər/', definition: '医生', partOfSpeech: 'n.', example: 'The doctor checked my health.' },
+            { word: 'early', phonetic: '/ˈɜːrli/', definition: '早的', partOfSpeech: 'adj.', example: 'We arrived early to the meeting.' },
+            { word: 'patient', phonetic: '/ˈpeɪʃnt/', definition: '病人', partOfSpeech: 'n.', example: 'The patient is feeling better now.' },
+            { word: 'find', phonetic: '/faɪnd/', definition: '发现', partOfSpeech: 'v.', example: 'I found my keys under the bed.' },
+            { word: 'help', phonetic: '/help/', definition: '帮助', partOfSpeech: 'v.', example: 'Can you help me with this?' },
+            { word: 'new', phonetic: '/nuː/', definition: '新的', partOfSpeech: 'adj.', example: 'I bought a new phone yesterday.' },
+            { word: 'way', phonetic: '/weɪ/', definition: '方式，方法', partOfSpeech: 'n.', example: 'There are many ways to solve this.' },
+            { word: 'think', phonetic: '/θɪŋk/', definition: '思考', partOfSpeech: 'v.', example: 'I think this is a good idea.' },
+            { word: 'learn', phonetic: '/lɜːrn/', definition: '学习', partOfSpeech: 'v.', example: 'Children learn very fast.' }
         ];
         
         // 当前词汇索引
@@ -610,43 +610,56 @@
         // 测试题数据
         const quizQuestions = [
             {
-                question: "What is the main difference between free and paid AI?",
+                question: "What does the AI system help doctors do?",
                 options: [
-                    "Free AI is better",
-                    "Paid AI can do more complex work",
-                    "They are exactly the same",
-                    "Free AI is more popular"
+                    "Find jobs",
+                    "Find cancer earlier",
+                    "Drive cars",
+                    "Teach students"
                 ],
                 correct: 1
             },
             {
-                question: "What does 'hype' mean in this article?",
+                question: "Where does Doctor Sarah Lee work?",
                 options: [
-                    "Reality",
-                    "Marketing exaggeration",
-                    "A type of AI",
-                    "A company name"
+                    "In a school",
+                    "In a hospital",
+                    "In a shop",
+                    "In a factory"
                 ],
                 correct: 1
             },
             {
-                question: "How does the article describe free AI compared to paid AI?",
+                question: "When do patients have a better chance of getting well?",
                 options: [
-                    "Like comparing an intern with a seasoned professional",
-                    "Like comparing water and fire",
-                    "Like comparing two identical twins",
-                    "Like comparing day and night"
+                    "When cancer is found early",
+                    "When they eat more",
+                    "When they sleep more",
+                    "When they watch TV"
                 ],
                 correct: 0
             },
             {
-                question: "What is the article's conclusion about AI?",
+                question: "What does the AI learn from?",
                 options: [
-                    "AI will replace all jobs",
-                    "AI is completely useless",
-                    "The answer is somewhere in the middle",
-                    "AI should be banned"
+                    "Books",
+                    "Medical pictures",
+                    "The internet",
+                    "Movies"
                 ],
+                correct: 1
+            },
+            {
+                question: "Does the AI replace doctors?",
+                options: [
+                    "Yes",
+                    "No",
+                    "We don't know",
+                    "Only sometimes"
+                ],
+                correct: 1
+            }
+        ];
                 correct: 2
             },
             {
